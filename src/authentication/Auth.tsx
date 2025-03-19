@@ -218,6 +218,7 @@ export default function Auth() {
 
       console.log("Response Data:", res.data);
       alert(isSignUp ? "Sign Up Successful!" : "Sign In Successful!");
+      localStorage.setItem("email",refEmail.current.value)
       refEmail.current.value = "";
       setPass("");
       setPassCheck("");
