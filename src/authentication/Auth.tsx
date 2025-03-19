@@ -219,7 +219,7 @@ export default function Auth() {
       refEmail.current.value = "";
       setPass("");
       setPassCheck("");
-      authCheckerfun()
+      authCheckerfun(true)
       localStorage.setItem("idToken",res.data.idToken)
     } catch (err) {
       setError(err.response?.data?.error?.message || "Something went wrong.");

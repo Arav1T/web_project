@@ -11,8 +11,8 @@ export const useCartContext=()=>{
 
 const CartProvider=({children})=>{
     const [authChecker,setAuthChecker] = useState(false)
-    const authCheckerfun=()=>{
-        setAuthChecker(true)
+    const authCheckerfun=(val)=>{
+        setAuthChecker(val)
     }
     return (
         <CartContext.Provider value={{authChecker, authCheckerfun}}>

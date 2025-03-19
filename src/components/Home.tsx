@@ -6,12 +6,12 @@ export default function Home() {
     const emailRef=useRef("")
     const handlOnVrify=async()=>{
         try {
-            const res = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`{
+            const res = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`,{
                 requestType:"VERIFY_EMAIL",
                 idToken:localStorage.getItem("idToken")
             })
             console.log(res.data);
-            
+            emailRef.current.value=""
 
         } catch (error) {
             
