@@ -155,10 +155,14 @@
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import React, { useRef, useState, useEffect } from "react";
+import { useCartContext } from "../store/Context";
+import { useNavigate } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_API_KEY || " ";
 
 export default function Auth() {
+  const navigate = useNavigate()
+  const {authCheckerfun, authChecker}=useCartContext()
   const refEmail = useRef("");
   const [pass, setPass] = useState("");
   const [passCheck, setPassCheck] = useState("");
@@ -215,12 +219,20 @@ export default function Auth() {
       refEmail.current.value = "";
       setPass("");
       setPassCheck("");
+      authCheckerfun()
     } catch (err) {
       setError(err.response?.data?.error?.message || "Something went wrong.");
     } finally {
       setIsLoading(false);
     }
   };
+  
+  useEffect(()=>{
+    if(authChecker){
+      navigate('', {replace:true})
+    }
+    
+  },[authChecker,navigate])
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
