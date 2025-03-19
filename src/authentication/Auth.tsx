@@ -153,10 +153,10 @@
 
 
 import axios from "axios";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Route } from "lucide-react";
 import React, { useRef, useState, useEffect } from "react";
 import { useCartContext } from "../store/Context";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_API_KEY || " ";
 
@@ -164,6 +164,7 @@ export default function Auth() {
   const navigate = useNavigate()
   const {authCheckerfun, authChecker}=useCartContext()
   const refEmail = useRef("");
+  // const forgetRef = useRef("");
   const [pass, setPass] = useState("");
   const [passCheck, setPassCheck] = useState("");
   const [error, setError] = useState("");
@@ -171,6 +172,7 @@ export default function Auth() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isForget,setIsForget] = useState(false)
   
   const url = isSignUp
     ? `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`
@@ -227,6 +229,25 @@ export default function Auth() {
       setIsLoading(false);
     }
   };
+
+  const handleOnForget =async ()=>{
+    try {
+      const res = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`,{
+        requestType:"PASSWORD_RESET",
+        email:refEmail.current.value
+      })
+      console.log(res.data);
+      alert("pelase check your email and reset password from there")
+      navigate('/auth', {replace:true})
+      setIsForget(false)
+      setIsSignUp(true)
+      refEmail.current.value=""
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   
   useEffect(()=>{
     if(authChecker){
@@ -252,7 +273,7 @@ export default function Auth() {
         />
 
         {/* 🔹 Password Input */}
-        <div className="relative w-full">
+        {!isForget && <div className="relative w-full">
           <label htmlFor="pass">Password:</label>
           <input
             required
@@ -271,10 +292,10 @@ export default function Auth() {
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
           {passerror && <p className="text-red-500 text-sm">{passerror}</p>}
-        </div>
+        </div>}
 
         {/* 🔹 Confirm Password Input (Only for Sign-Up) */}
-        {isSignUp && (
+        {!isForget && isSignUp && (
           <div className="relative w-full mt-3">
             <label htmlFor="passCheck">Confirm Password:</label>
             <input
@@ -295,26 +316,38 @@ export default function Auth() {
             </button>
           </div>
         )}
-
+        
         {/* 🔹 Error Message */}
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
         {/* 🔹 Submit Button */}
-        <button
+        {!isForget && <button
           type="submit"
           disabled={isLoading}
           className="w-full bg-blue-500 text-white py-2 mt-4 rounded-lg hover:bg-blue-600 transition"
         >
           {isLoading ? "Processing..." : isSignUp ? "Sign Up" : "Sign In"}
-        </button>
+        </button>}
       </form>
+      {!isForget && !isSignUp && 
+      <div className="mt-4 text-center">
+      <button onClick={() => setIsForget(!isForget)} className="text-blue-500 hover:underline text-sm">
+        Forget Password
+      </button>
+    </div>}
+    {isForget && <>
+   
+    <button onClick={
+      handleOnForget
+    }>Forget</button>
+    </>}
 
       {/* 🔹 Toggle Sign Up / Sign In */}
-      <div className="mt-4 text-center">
+      {!isForget && <div className="mt-4 text-center">
         <button onClick={() => setIsSignUp(!isSignUp)} className="text-blue-500 hover:underline text-sm">
           {isSignUp ? "Already have an account? Sign In" : "Need an account? Sign Up"}
         </button>
-      </div>
+      </div>}
     </div>
   );
 }
