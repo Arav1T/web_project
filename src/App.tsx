@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Auth from './authentication/Auth'
-import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router-dom'
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from 'react-router-dom'
 import { useCartContext } from './store/Context'
 import Layout from './Layout'
 import Home from './components/Home'
@@ -24,7 +24,7 @@ function App() {
 
   return (
     <>
-      <Auth/>
+      <RouterProvider router={router}/>
     </>
   )
 }

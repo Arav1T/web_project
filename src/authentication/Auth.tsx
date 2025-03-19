@@ -220,6 +220,7 @@ export default function Auth() {
       setPass("");
       setPassCheck("");
       authCheckerfun()
+      localStorage.setItem("idToken",res.data.idToken)
     } catch (err) {
       setError(err.response?.data?.error?.message || "Something went wrong.");
     } finally {
@@ -229,7 +230,7 @@ export default function Auth() {
   
   useEffect(()=>{
     if(authChecker){
-      navigate('', {replace:true})
+      navigate('/', {replace:true})
     }
     
   },[authChecker,navigate])

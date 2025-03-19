@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 const CartContext=createContext({
-    authChecker:true,
+    authChecker:false,
     authCheckerfun:()=>{}
 })
 
@@ -10,9 +10,9 @@ export const useCartContext=()=>{
 }
 
 const CartProvider=({children})=>{
-    const [authChecker,setAuthChecker] = useState(true)
+    const [authChecker,setAuthChecker] = useState(false)
     const authCheckerfun=()=>{
-        setAuthChecker(false)
+        setAuthChecker(true)
     }
     return (
         <CartContext.Provider value={{authChecker, authCheckerfun}}>
